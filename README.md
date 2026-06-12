@@ -8,7 +8,7 @@ Several functions for descriptive analyses (tables, figures, etc.)
 
 <summary>Descriptive table</summary> 
 
-# Fonction ‘TableDesc’
+# ‘TableDesc’ fonction 
 
 TableDesc : To create a comparative table with a treatment and tests.
 
