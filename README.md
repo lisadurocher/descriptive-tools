@@ -6,7 +6,7 @@ Several functions for descriptive analyses (tables, figures, etc.)
 
 <details>
 
-<summary>Tableau descriptif</summary> 
+<summary>Descriptive table</summary> 
 
 # Fonction ‘TableDesc’
 
