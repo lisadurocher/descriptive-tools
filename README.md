@@ -130,7 +130,7 @@ This function returns a flextable object. If the continuous variable is normally
 ### Examples
 
 ```r
-source("https://raw.githubusercontent.com/lisadurocher/TableDesc/main/TableDesc.R")
+source("https://raw.githubusercontent.com/chupverse/descriptive-tools/main/TableDesc.R")
 
 data("mtcars")
 
@@ -150,7 +150,7 @@ TableDesc(data=mtcars, vars=vars, names=names, trt="am", virg=1, nolevels=noleve
 ```
 Simple version:
 ```r
-TableDesc(data=mtcars, TRT="am")
+TableDesc(data=mtcars, trt="am")
 ```
 
 </details>
