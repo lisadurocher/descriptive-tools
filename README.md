@@ -140,15 +140,13 @@ mtcars$am <- factor(mtcars$am, levels=c(0,1), labels = c("Automatic","Manual"))
 
 mtcars$cyl <- factor(mtcars$cyl, c(4,6,8))
 
-mtcars$vs <- factor(mtcars$vs, levels = c(1,0))
-
 vars <- c("mpg","cyl","hp","vs")
 
 labels <- c("Miles/(US) gallon", "Number of cylinders", "Gross horsepower", "V/S")
 
 nolevels <- c("vs")
 
-tableDESC(data=mtcars, vars=vars, labels=labels, trt="am", digits=c(1,0), nolevels=nolevels, nonnormal = "none", smd = TRUE, export = FALSE)
+tableDESC(data=mtcars, vars=vars, labels=labels, trt="am", digits=c(1,0), nolevels=nolevels, nonnormal = "none", smd = TRUE, export = FALSE, binary01 = TRUE)
 ```
 Simple version:
 ```r
