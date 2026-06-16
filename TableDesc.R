@@ -5,21 +5,6 @@
 '%ni%' <- Negate('%in%')
 
 
-#Install the required packages
-requiredPackages = c("haven","flextable","officer","devEMF","car","dplyr","reshape2","stringr")
-for(p in requiredPackages){
-  if(p %ni% installed.packages()[,"Package"]) {
-    install.packages(p)
-    library(p,character.only = TRUE)
-  } else {library(p,character.only = TRUE)}
-}
-rm(p)
-rm(requiredPackages)
-
-
-
-
-
 #### getresult : to get mean +- SD and n(%) ####
 #Function to get moy+ET (or med(Q1-Q3) if not normal) for numeric and n(%) for factors
 ##EX: #CTRL+SHIFT+C to comment/uncomment below
@@ -130,7 +115,7 @@ checknormality <- function(data,var,TRT=NULL) {
 
 
 
-#### FTdesc :  to get table with getresults and names ####
+#### FTdesc :  to get table with getresults and labels ####
 
 #Can be used on its own to get means and freq for the global pop but no FlexTable is returned
 #FlexTable = Table that can be exported to Word
@@ -140,15 +125,15 @@ checknormality <- function(data,var,TRT=NULL) {
 # mtcars$cyl=as.factor(mtcars$cyl)
 # mtcars$vs=as.factor(mtcars$vs)
 # vars=c("mpg","cyl","hp","vs")
-# names=c("Miles/(US) gallon" , "Number of cylinders" ,"Gross horsepower" , "V/S")
+# labels=c("Miles/(US) gallon" , "Number of cylinders" ,"Gross horsepower" , "V/S")
 # nolevels=vars
 # mtcars$vs=relevel(mtcars$vs,ref="1")
 # #nolevels means that any variable with only 2 levels will be on a single line and the first level will be used, thus relevel needed for some
-# FTdesc(data=mtcars,vars=vars,names=names,nolevels=vars,virg=c(1,2,3))
+# FTdesc(data=mtcars,vars=vars,labels=labels,nolevels=vars,virg=c(1,2,3))
 # #virg can be specified: it's the amount of decimals used for the numeric variable
 # #The \t means a tabulation in a word document, used for all levels of a factor
 # #reference is TRUE by default, any other value removes the ", n (%)" after the label for categorical variables
-FTdesc <- function(data,vars,names,virg=NULL,virg.percent=0,nolevels=NULL,normal=NULL,reference=TRUE, MISSING=TRUE){
+FTdesc <- function(data,vars,labels,virg=NULL,virg.percent=0,nolevels=NULL,normal=NULL,reference=TRUE, MISSING=TRUE){
   data=droplevels(data)
   #Setting virg to the correct length:
   if (is.null(virg)) {
@@ -172,23 +157,23 @@ FTdesc <- function(data,vars,names,virg=NULL,virg.percent=0,nolevels=NULL,normal
   
   tab=data.frame(A= character(), B= character())
   tab2=data.frame(A= character(), B= character())
-  if (length(vars) != length(names)) {stop("Varlist and names are not the same length.")}
+  if (length(vars) != length(labels)) {stop("Varlist and labels are not the same length.")}
   for (i in 1:length(vars)) {
     if (is.factor(data[,vars[i]])) {
       # If in nolevels and length = 2 then 1 line: (OR 1 level meaning 100% answered by this 1 level; EX: only YES answers)
       if (vars[i] %in% nolevels && length(levels(data[,vars[i]]))==2 ) { 
-        if (reference == TRUE) {tab2=data.frame(A=c(paste0(names[i],", n (%)")),B=getresult(data=data,var=vars[i],levelj=levels(data[,vars[i]])[1],virg=virg,virg.percent=virg.percent))} 
-        else {tab2=data.frame(A=c(paste0(names[i],"")),B=getresult(data=data,var=vars[i],levelj=levels(data[,vars[i]])[1],virg=virg,virg.percent=virg.percent))}
+        if (reference == TRUE) {tab2=data.frame(A=c(paste0(labels[i],", n (%)")),B=getresult(data=data,var=vars[i],levelj=levels(data[,vars[i]])[1],virg=virg,virg.percent=virg.percent))} 
+        else {tab2=data.frame(A=c(paste0(labels[i],"")),B=getresult(data=data,var=vars[i],levelj=levels(data[,vars[i]])[1],virg=virg,virg.percent=virg.percent))}
         tab=rbind(tab,tab2)
       } else {
         #Add exception, if length levels = 0 then run code above and return "-"
         if (all(is.na(data[,vars[i]]))) {
-          if (reference == TRUE ) {tab2=data.frame(A=c(paste0(names[i],", n (%)")),B=getresult(data=data,var=vars[i],levelj=levels(data[,vars[i]])[1],virg=virg,virg.percent=virg.percent))} 
-          else {tab2=data.frame(A=c(paste0(names[i],"")),B=getresult(data=data,var=vars[i],levelj=levels(data[,vars[i]])[1],virg=virg,virg.percent=virg.percent))}
+          if (reference == TRUE ) {tab2=data.frame(A=c(paste0(labels[i],", n (%)")),B=getresult(data=data,var=vars[i],levelj=levels(data[,vars[i]])[1],virg=virg,virg.percent=virg.percent))} 
+          else {tab2=data.frame(A=c(paste0(labels[i],"")),B=getresult(data=data,var=vars[i],levelj=levels(data[,vars[i]])[1],virg=virg,virg.percent=virg.percent))}
           tab=rbind(tab,tab2)
         } else {
           #Else multiple rows, one for each level
-          if (reference == TRUE) {tab2=data.frame(A=c(paste0(names[i],", n (%)")),B="")} else {tab2=data.frame(A=c(paste0(names[i],"")),B="")}
+          if (reference == TRUE) {tab2=data.frame(A=c(paste0(labels[i],", n (%)")),B="")} else {tab2=data.frame(A=c(paste0(labels[i],"")),B="")}
           tab=rbind(tab,tab2)
           for (j in levels(data[,vars[i]])) {
             tab2=data.frame(A=c(paste0("\t",j)),B=getresult(data=data,var=vars[i],levelj=j,virg=virg,virg.percent=virg.percent)) 
@@ -198,7 +183,7 @@ FTdesc <- function(data,vars,names,virg=NULL,virg.percent=0,nolevels=NULL,normal
         
       }
     } else {
-      tab2=data.frame(A=c(paste0(names[i])),B=getresult(data=data,var=vars[i],virg=virg,virg.percent=virg.percent,normal=normal[i]))
+      tab2=data.frame(A=c(paste0(labels[i])),B=getresult(data=data,var=vars[i],virg=virg,virg.percent=virg.percent,normal=normal[i]))
       tab=rbind(tab,tab2)
     }
     
@@ -462,7 +447,7 @@ comptest <- function(data,var,grp,normal=NULL,nrpval,paired) {
 #### smd : to get the standardized Mean Difference ####
 
 
-SMD <- function(data,var,TRT,name,nolevels=NULL, MISSING = TRUE){
+SMD <- function(data,var,TRT,label,nolevels=NULL, MISSING = TRUE){
   nbvar <- length(var)
   smd <- c()
   varnames <- c()
@@ -473,7 +458,7 @@ SMD <- function(data,var,TRT,name,nolevels=NULL, MISSING = TRUE){
       s1 <- var(data[,var[i]][data[,TRT] == levels(data[,TRT])[2]], na.rm=TRUE)
       s0 <- var(data[,var[i]][data[,TRT] == levels(data[,TRT])[1]], na.rm=TRUE)
       smd <- c(smd,format(round((abs(z1-z0)/ sqrt((s1+s0)/2)),3),nsmall=3))
-      varnames <- c(varnames, name[i])
+      varnames <- c(varnames, label[i])
     }
     if(is.factor(data[,var[i]])){
       if (length(levels(data[,var[i]])) == 2) {
@@ -484,14 +469,14 @@ SMD <- function(data,var,TRT,name,nolevels=NULL, MISSING = TRUE){
         p0 <- length(data[,var[i]][data[,var[i]]==levels(data[,var[i]])[2] &
                                      !is.na(data[,var[i]]) & data[,TRT] == levels(data[,TRT])[2]])/tot0
         smd <- c(smd,format(round((abs(p1-p0)/sqrt((p1*(1-p1)+p0*(1-p0))/2)),3),nsmall=3))
-        varnames <- c(varnames, name[i])
+        varnames <- c(varnames, label[i])
         if(var[i] %ni% nolevels){
           varnames <- c(varnames, levels(data[,var[i]]))
           smd <- c(smd, rep("", length(levels(data[,var[i]])))) 
         }
       }else if (length(levels(data[,var[i]])) == 1) {
         smd <- c(smd, "-")
-        varnames <- c(varnames, name[i])
+        varnames <- c(varnames, label[i])
         if(var[i] %ni% nolevels){
           smd <- c(smd, "")
           varnames <- c(varnames, levels(data[,var[i]]))
@@ -529,14 +514,14 @@ SMD <- function(data,var,TRT,name,nolevels=NULL, MISSING = TRUE){
         
         
 
-        varnames <- c(varnames, name[i])
+        varnames <- c(varnames, label[i])
         varnames <- c(varnames, levels(data[,var[i]]))
         smd <- c(smd, format(round(smdCat,3), nsmall = 3), rep("", length(levels(data[,var[i]]))))
         
         
       }else {
         smd <- c(smd, "-")
-        varnames <- c(varnames, name[i])}
+        varnames <- c(varnames, label[i])}
     }
     
     if(MISSING == TRUE){
@@ -563,7 +548,7 @@ SMD <- function(data,var,TRT,name,nolevels=NULL, MISSING = TRUE){
 
 #data=object of class data.frame
 #vars=list of variable names
-#names=list of labels for the variables
+#labels=list of labels for the variables
 #trt= comparative group that needs to be specified else only a desc table for the total pop
 #virg = decimals
 #virg.percent = decimals for percentage
@@ -577,11 +562,12 @@ SMD <- function(data,var,TRT,name,nolevels=NULL, MISSING = TRUE){
 #pvalue = TRUE to compare groups with statistical tests
 #smd = TRUE to compute the standardized mean differences
 #missing = TRUE to describe the number of missing values
-#paired = TRUE for two matched samples
 #legend = TRUE to add a footnote
+#paired = TRUE for two matched samples
+#binary01 = TRUE if the binary variables are encoded as 0/1 
 
 
-TableDesc = function(data,vars=NULL,names=NULL,trt=NULL,virg=0,virg.percent=0,nolevels=NULL,nonnormal=NULL,nrpval=4,boldpval=0.05,boldsmd=0.1,reference=TRUE, export=FALSE,
+tableDESC = function(data,vars=NULL,labels=NULL,trt=NULL,digits=c(1,0),nolevels=NULL,nonnormal=NULL,nrpval=4,boldpval=0.05,boldsmd=0.1,reference=TRUE, export=FALSE,
                      pvalue=TRUE, smd = FALSE, missing = TRUE, legend=TRUE, paired=FALSE, binary01=FALSE) {
   data=droplevels(data)
   #If not data.frame but tibble:
@@ -620,14 +606,14 @@ TableDesc = function(data,vars=NULL,names=NULL,trt=NULL,virg=0,virg.percent=0,no
       if(length(levels(data[,i])) != 2){nolevels <- nolevels[-which(nolevels == i)]}
     }}
   
-  
-  #if names missing set it to vars
-  if (is.null(names)) {names=vars}
-  
   #Setting virg to the correct length:
-  if (length(virg) >1) {
-    virg=virg[1]
-    warning("virg should be a unique value")
+  if (length(digits) == 1) {
+    virg=virg.percent=digits
+  } else if (length(digits) == 2){
+    virg=digits[1]
+    virg.percent=digits[2]
+  } else{
+    warning("Digits must have a length of 1 if the numeric and categorical variables are presented with the same number of decimal places, and a length of 2 otherwise.")
   }
   
   #If normal is empty then use checknormality function for each variable
@@ -650,11 +636,11 @@ TableDesc = function(data,vars=NULL,names=NULL,trt=NULL,virg=0,virg.percent=0,no
     normal[which(vars %in% nonnormal)] <- 0
   }
   
-  #If names is not given the variable names are used as labels
-  if (is.null(names)) {names=vars}
+  #If labels is not given the variable names are used as labels
+  if (is.null(labels)) {labels=vars}
   
   #Use the FTdesc function to get the description of the general population
-  tab=FTdesc(data=data,vars=vars,names=names,virg=virg,virg.percent=virg.percent,nolevels=nolevels,normal=normal,reference=reference, MISSING = missing)
+  tab=FTdesc(data=data,vars=vars,labels=labels,virg=virg,virg.percent=virg.percent,nolevels=nolevels,normal=normal,reference=reference, MISSING = missing)
   tab  
   colnames(tab)=c("",paste("All","\n(n=",dim(data)[1],")",sep=""))
   
@@ -805,7 +791,7 @@ TableDesc = function(data,vars=NULL,names=NULL,trt=NULL,virg=0,virg.percent=0,no
     }
     
     if (smd == TRUE) {
-    tab=cbind(tab,temp,SMD(data=data,var=vars,TRT=trt,name=names,nolevels=nolevels,MISSING=missing)[,2])
+    tab=cbind(tab,temp,SMD(data=data,var=vars,TRT=trt,label=labels,nolevels=nolevels,MISSING=missing)[,2])
     headers=c()
     for (trtgrp in names(table(data[,trt]))) {
       headers=c(headers,paste0(trtgrp,"\n(n=",dim(data[which(data[,trt]==trtgrp),])[1],")"))
@@ -825,7 +811,7 @@ TableDesc = function(data,vars=NULL,names=NULL,trt=NULL,virg=0,virg.percent=0,no
   }else{
     
     if (smd == TRUE) {
-      tab=cbind(tab,SMD(data=data,var=vars,TRT=trt,name=names,nolevels=nolevels,MISSING=missing)[,2])
+      tab=cbind(tab,SMD(data=data,var=vars,TRT=trt,label=labels,nolevels=nolevels,MISSING=missing)[,2])
       headers=c()
       for (trtgrp in names(table(data[,trt]))) {
         headers=c(headers,paste0(trtgrp,"\n(n=",dim(data[which(data[,trt]==trtgrp),])[1],")"))
@@ -853,7 +839,7 @@ TableDesc = function(data,vars=NULL,names=NULL,trt=NULL,virg=0,virg.percent=0,no
   temp
   test
   
-  #Headers for the columns, to change the names you must directly change the level names of the TRT variable
+  #Headers for the columns, to change the names you must directly change the level names of the trt variable
   
   
   

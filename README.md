@@ -8,9 +8,9 @@ Several functions for descriptive analyses (tables, figures, etc.)
 
 <summary>Descriptive table</summary> 
 
-# ‘TableDesc’ fonction 
+# ‘tableDESC’ fonction 
 
-TableDesc : To create a comparative table with a treatment and tests.
+tableDESC : To create a comparative table with a treatment and tests.
 
 
 ### Description
@@ -19,7 +19,7 @@ This function calculates descriptive statistics for continuous and categorical v
 
 ### Usage
 
-TableDesc(data, vars=NULL, names=NULL, trt=NULL, virg=0, virg.percent=0, nolevels=NULL, nonnormal=NULL, nrpval=4, boldpval=0.05, boldsmd=0.1, reference=TRUE, export=FALSE, pvalue=TRUE, smd=FALSE, missing=FALSE, paired=FALSE, legend=TRUE, binary01=FALSE)
+tableDESC(data, vars=NULL, names=NULL, trt=NULL, virg=0, virg.percent=0, nolevels=NULL, nonnormal=NULL, nrpval=4, boldpval=0.05, boldsmd=0.1, reference=TRUE, export=FALSE, pvalue=TRUE, smd=FALSE, missing=FALSE, paired=FALSE, legend=TRUE, binary01=FALSE)
 
 ### Arguments
 
@@ -37,7 +37,7 @@ TableDesc(data, vars=NULL, names=NULL, trt=NULL, virg=0, virg.percent=0, nolevel
 </tr>
 
 <tr style="background:none;">
-<td style="border:none; ">names</td>
+<td style="border:none; ">labels</td>
 <td style="border:none; ">A list of labels for the variables. If NULL, <i>vars</i> will be used.</td>
 </tr>
 
@@ -47,8 +47,8 @@ TableDesc(data, vars=NULL, names=NULL, trt=NULL, virg=0, virg.percent=0, nolevel
 </tr>
 
 <tr style="background:none;">
-<td style="border:none; ">virg</td>
-<td style="border:none; ">Number of decimal for continuous variables. The default value is 0.</td>
+<td style="border:none; ">digits</td>
+<td style="border:none; ">A list of length 2. The first argument specifies the number of decimal for continuous variables. The second specifies the number of decimal for percentages. The default value is c(1,0).</td>
 </tr>
 
 <tr style="background:none;">
@@ -130,6 +130,13 @@ This function returns a flextable object. If the continuous variable is normally
 ### Examples
 
 ```r
+
+#Install the required packages
+installed.packages(flextable)
+library(flextable)
+installed.packages(officer)
+library(officer)
+
 source("https://raw.githubusercontent.com/chupverse/descriptive-tools/main/TableDesc.R")
 
 data("mtcars")
@@ -142,15 +149,15 @@ mtcars$vs <- factor(mtcars$vs, levels = c(1,0))
 
 vars <- c("mpg","cyl","hp","vs")
 
-names <- c("Miles/(US) gallon", "Number of cylinders", "Gross horsepower", "V/S")
+labels <- c("Miles/(US) gallon", "Number of cylinders", "Gross horsepower", "V/S")
 
 nolevels <- c("vs")
 
-TableDesc(data=mtcars, vars=vars, names=names, trt="am", virg=1, nolevels=nolevels, nonnormal = "none", smd = TRUE, export = FALSE)
+tableDESC(data=mtcars, vars=vars, labels=labels, trt="am", digits=c(1,0), nolevels=nolevels, nonnormal = "none", smd = TRUE, export = FALSE)
 ```
 Simple version:
 ```r
-TableDesc(data=mtcars, trt="am")
+tableDESC(data=mtcars, trt="am")
 ```
 
 </details>
