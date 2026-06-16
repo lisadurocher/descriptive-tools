@@ -19,7 +19,7 @@ This function calculates descriptive statistics for continuous and categorical v
 
 ### Usage
 
-tableDESC(data, vars=NULL, names=NULL, trt=NULL, virg=0, virg.percent=0, nolevels=NULL, nonnormal=NULL, nrpval=4, boldpval=0.05, boldsmd=0.1, reference=TRUE, export=FALSE, pvalue=TRUE, smd=FALSE, missing=FALSE, paired=FALSE, legend=TRUE, binary01=FALSE)
+tableDESC(data, vars=NULL, labels=NULL, trt=NULL, digits=c(1,0), nolevels=NULL, nonnormal=NULL, nrpval=4, boldpval=0.05, boldsmd=0.1, reference=TRUE, export=FALSE, pvalue=TRUE, smd=FALSE, missing=FALSE, paired=FALSE, legend=TRUE, binary01=FALSE)
 
 ### Arguments
 
@@ -49,11 +49,6 @@ tableDESC(data, vars=NULL, names=NULL, trt=NULL, virg=0, virg.percent=0, nolevel
 <tr style="background:none;">
 <td style="border:none; ">digits</td>
 <td style="border:none; ">A list of length 2. The first argument specifies the number of decimal for continuous variables. The second specifies the number of decimal for percentages. The default value is c(1,0).</td>
-</tr>
-
-<tr style="background:none;">
-<td style="border:none; ">virg.percent</td>
-<td style="border:none; ">Number of decimal for percentages. The default value is 0.</td>
 </tr>
 
 <tr style="background:none;">

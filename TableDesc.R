@@ -550,9 +550,8 @@ SMD <- function(data,var,TRT,label,nolevels=NULL, MISSING = TRUE){
 #vars=list of variable names
 #labels=list of labels for the variables
 #trt= comparative group that needs to be specified else only a desc table for the total pop
-#virg = decimals
-#virg.percent = decimals for percentage
-#nolevels = vector of variables with 2 levels but transformed to 1 row (ex: Sexe, Homme Femme -> 1 Line Homme)
+#digits=list of 1: the number of decimals for continuous variables and 2: the number of decimals for percentages
+#nolevels=vector of variables with 2 levels but transformed to 1 row (ex: Sexe, Homme Femme -> 1 Line Homme)
 #nonnormal=NULL by default, simple Shapiro else "none": for every variables distributed normaly or "all": for every variables not distributed normaly or a list of variables not distributed normaly
 #nrpval=number of decimals to be used for the pvalue
 #boldpval=0.05 by default, puts all pvalues lower than set number in bold
