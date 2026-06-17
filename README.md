@@ -132,7 +132,7 @@ library(flextable)
 installed.packages(officer)
 library(officer)
 
-source("https://raw.githubusercontent.com/chupverse/descriptive-tools/main/TableDesc.R")
+source("https://raw.githubusercontent.com/chupverse/descriptive-tools/main/tableDESC.R")
 
 data("mtcars")
 
