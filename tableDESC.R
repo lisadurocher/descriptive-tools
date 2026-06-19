@@ -48,7 +48,7 @@ getresult <- function(data,var,levelj=NULL,virg=NULL,virg.percent=NULL,normal=NU
       x=format(round(median(data[,var],na.rm=TRUE),virg), nsmall = virg)
       y=format(round(quantile(data[,var],na.rm=TRUE,type=2)[2],virg), nsmall = virg)
       z=format(round(quantile(data[,var],na.rm=TRUE,type=2)[4],virg), nsmall = virg)
-      return(paste(x," (",y,"-",z,")",sep=""))
+      return(paste(x," (",y,"–",z,")",sep=""))
       
     } else {
       #Only NA then return nothing:
