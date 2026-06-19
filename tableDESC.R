@@ -796,7 +796,7 @@ tableDESC = function(data,vars=NULL,labels=NULL,trt=NULL,digits=c(1,0),nolevels=
       headers=c(headers,paste0(trtgrp,"\n(n=",dim(data[which(data[,trt]==trtgrp),])[1],")"))
     }
     colnames(tab)=c("",paste("All","\n(n=",dim(data)[1],")",sep="")
-                    ,headers,"p","SMD (%)")
+                    ,headers,"p","Standardized difference")
   }else { 
     tab=cbind(tab,temp)
     headers=c()
@@ -816,7 +816,7 @@ tableDESC = function(data,vars=NULL,labels=NULL,trt=NULL,digits=c(1,0),nolevels=
         headers=c(headers,paste0(trtgrp,"\n(n=",dim(data[which(data[,trt]==trtgrp),])[1],")"))
       }
       colnames(tab)=c("",paste("All","\n(n=",dim(data)[1],")",sep="")
-                      ,headers,"SMD (%)")
+                      ,headers,"Standardized difference")
     }else { 
       tab=cbind(tab)
       headers=c()
@@ -872,14 +872,7 @@ tableDESC = function(data,vars=NULL,labels=NULL,trt=NULL,digits=c(1,0),nolevels=
   
   if(legend == TRUE){
     num=1
-    if (smd == TRUE){
-      Ftab <- flextable::footnote(Ftab,i = 1, j = which(colnames(Table) == "SMD (%)"), 
-                                  part = "header", inline = TRUE,
-                                  ref_symbols = letters[num], value = as_paragraph("SMD: standardized mean difference"))
-      Ftab <- flextable::italic(Ftab,italic = T,part = "footer")
-      Ftab <- flextable::fontsize(Ftab, size = 9, part = "footer")
-      num=num+1
-    }
+    
     if (pvalue == TRUE){
       
       for (i in 1:length(unique(test))) {
