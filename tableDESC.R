@@ -48,7 +48,7 @@ getresult <- function(data,var,levelj=NULL,virg=NULL,virg.percent=NULL,normal=NU
       x=format(round(median(data[,var],na.rm=TRUE),virg), nsmall = virg)
       y=format(round(quantile(data[,var],na.rm=TRUE,type=2)[2],virg), nsmall = virg)
       z=format(round(quantile(data[,var],na.rm=TRUE,type=2)[4],virg), nsmall = virg)
-      return(paste(x," (",y,"–",z,")",sep=""))
+      return(paste(x," (",y,"-",z,")",sep=""))
       
     } else {
       #Only NA then return nothing:
@@ -294,10 +294,10 @@ comptest <- function(data,var,grp,normal=NULL,nrpval,paired) {
             test <- "-"} 
           if (suppressWarnings(wilcox.test(data[which(data[,grp]==names(table(data[,grp]))[1]),][,var],data[which(data[,grp]==names(table(data[,grp]))[2]),][,var]))$p.value < lowerval) {
             pvalue <- lowervalch
-            test <- "Wilcoxon–Mann–Whitney test"
+            test <- "Wilcoxon-Mann-Whitney test"
           } else {
             pvalue <- formatC( suppressWarnings(wilcox.test(data[which(data[,grp]==names(table(data[,grp]))[1]),][,var],data[which(data[,grp]==names(table(data[,grp]))[2]),][,var]))$p.value, format='f', digits=nrpval )
-            test <- "Wilcoxon–Mann–Whitney test"
+            test <- "Wilcoxon-Mann-Whitney test"
           }
           
           
